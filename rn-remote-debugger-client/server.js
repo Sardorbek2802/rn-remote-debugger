@@ -2,12 +2,32 @@ const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const PORT = 8989;
 
-// 创建 HTTP 服务器
+const getLocalIP = () => {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+};
+
+const LOCAL_IP = getLocalIP();
+
 const server = http.createServer((req, res) => {
-  if (req.url === '/' || req.url === '/index.html') {
+  if (req.url === '/ip') {
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    res.end(JSON.stringify({ ip: LOCAL_IP, port: PORT }));
+  } else if (req.url === '/' || req.url === '/index.html') {
     fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
       if (err) {
         res.writeHead(500);
@@ -50,9 +70,25 @@ wss.on('connection', (ws) => {
   });
 });
 
-server.listen(PORT, () => {
+const os = require('os');
+
+const getLocalIP = () => {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+};
+
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Remote Console Debugger running on:`);
-  console.log(`   WebSocket: ws://localhost:${PORT}`);
-  console.log(`   Browser:   http://localhost:${PORT}`);
-  console.log(`\n📱 Start needle2020 app to see logs here`);
+  console.log(`   WebSocket: ws://${LOCAL_IP}:${PORT}`);
+  console.log(`   Browser:   http://${LOCAL_IP}:${PORT}`);
+  console.log(`   IP API:    http://${LOCAL_IP}:${PORT}/ip`);
+  console.log(`\n📱 iOS: Auto-connect to ${LOCAL_IP}`);
+  console.log(`📱 Android: Run 'adb reverse tcp:${PORT} tcp:${PORT}'`);
 });

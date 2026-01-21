@@ -1,10 +1,15 @@
 {
   "name": "rn-remote-debugger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Remote debugger for React Native - intercept console logs and network requests",
   "main": "index.js",
+  "bin": {
+    "rn-remote-debugger-create": "./bin/create-config.js",
+    "rn-remote-debugger-ip": "./bin/get-local-ip.js"
+  },
   "files": [
     "index.js",
+    "bin",
     "README.md"
   ],
   "keywords": [

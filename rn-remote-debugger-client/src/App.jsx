@@ -62,6 +62,10 @@ function App() {
 
     ws.onopen = () => {
       setStatus('connected');
+      // 清空所有日志和网络请求
+      setNetworkRequests([]);
+      setSelectedRequest(null);
+      setSearchText('');
     };
 
     ws.onmessage = (event) => {

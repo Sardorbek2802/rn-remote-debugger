@@ -1,4 +1,5 @@
 // RN Remote Debugger - npm package
+const path = require('path');
 let ws = null;
 let messageQueue = [];
 
@@ -221,14 +222,13 @@ const setupNetworkInterceptor = () => {
   };
 };
 
-const connect = (port = 8989) => {
+const connect = (port = 8989, host = 'localhost') => {
   try {
-    ws = new WebSocket(`ws://localhost:${port}`);
+    ws = new WebSocket(`ws://${host}:${port}`);
 
     ws.onopen = () => {
-      originalConsole.log('[RN Remote Debugger] ✅ Connected');
+      originalConsole.log(`[RN Remote Debugger] ✅ Connected to ${host}:${port}`);
 
-      // 发送队列中的消息
       while (messageQueue.length > 0) {
         const msg = messageQueue.shift();
         try {
@@ -241,7 +241,7 @@ const connect = (port = 8989) => {
 
     ws.onclose = () => {
       originalConsole.log('[RN Remote Debugger] ❌ Disconnected, reconnecting...');
-      setTimeout(() => connect(port), 3000);
+      setTimeout(() => connect(port, host), 3000);
     };
 
     ws.onerror = (error) => {
@@ -249,19 +249,37 @@ const connect = (port = 8989) => {
     };
   } catch (error) {
     originalConsole.log('[RN Remote Debugger] Connection failed:', error.message);
-    setTimeout(() => connect(port), 3000);
+    setTimeout(() => connect(port, host), 3000);
   }
 };
 
-const initRemoteDebugger = (options = {}) => {
-  // 只在开发环境启用
+// 读取配置文件
+const loadConfig = () => {
   if (!__DEV__) {
-    return {
-      disconnect: () => { }
-    };
+    return {};
+  }
+    try {
+        // 从 node_modules/rn-remote-debugger/ 向上两级到项目根目录
+        const config = require('../../rn-remote-debug.js');
+        console.log("rn-remote-debug.js loaded===>", config);
+        return config || {};
+    } catch (e) {
+        // 配置文件不存在或读取失败，返回空对象
+        console.log("rn-remote-debug.js not found, using defaults");
+        return {};
+    }
+};
+
+const initRemoteDebugger = (options = {}) => {
+  if (!__DEV__) {
+    return { disconnect: () => { } };
   }
 
-  const { port = 8989, enableConsole = true, enableNetwork = true } = options;
+  // 读取配置文件并与传入的 options 合并（配置文件优先级更高）
+  const fileConfig = loadConfig();
+  const config = { ...options, ...fileConfig };
+
+  const { port = 8989, host = 'localhost', enableConsole = true, enableNetwork = true } = config;
 
   if (enableConsole) {
     setupConsoleInterceptor();
@@ -271,7 +289,7 @@ const initRemoteDebugger = (options = {}) => {
     setupNetworkInterceptor();
   }
 
-  connect(port);
+  connect(port, host);
 
   return {
     disconnect: () => {
