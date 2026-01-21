@@ -12,8 +12,9 @@ A remote debugging tool for React Native applications that allows real-time view
 - 📊 View request details (Request, Response, cURL)
 - 🎨 Beautiful UI design
 - ⚡️ Real-time connection status
+- 📱 Auto-clear logs on app restart
 
-## Installation & Usage
+## Quick Start
 
 ### 1. Install npm package in React Native project
 
@@ -23,37 +24,134 @@ npm install rn-remote-debugger
 yarn add rn-remote-debugger
 ```
 
-### 2. Import in project entry file
+### 2. Create Configuration File (Recommended)
+
+Generate a configuration file in your project root:
+
+```bash
+npx rn-remote-debugger-create
+```
+
+This creates a `rn-remote-debug.js` file with your computer's IP address:
+
+```javascript
+if (__DEV__) {
+  module.exports = {
+    host: '192.168.1.100', // Auto-detected IP
+    port: 8989,
+    enableConsole: true,
+    enableNetwork: true
+  };
+} else {
+  module.exports = {};
+}
+```
+
+### 3. Import in project entry file
 
 Add at the top of `index.js` or `App.js`:
 
 ```javascript
 import initRemoteDebugger from "rn-remote-debugger";
 
-// Use default configuration
 initRemoteDebugger();
+```
 
-// Or with custom configuration
+The debugger will automatically read the configuration file and connect.
+
+### 4. Android Setup
+
+For Android devices/emulators, run this command in terminal before starting your app:
+
+```bash
+adb reverse tcp:8989 tcp:8989
+```
+
+### 5. Start the Desktop App
+
+Download and open the RN Remote Debugger desktop app to view logs and network requests.
+
+## Configuration
+
+### Using Configuration File (Recommended)
+
+Create `rn-remote-debug.js` in your project root:
+
+```javascript
+if (__DEV__) {
+  module.exports = {
+    host: '192.168.1.100',
+    port: 8989,
+    enableConsole: true,
+    enableNetwork: true
+  };
+} else {
+  module.exports = {};
+}
+```
+
+**Priority**: Configuration file > Code parameters
+
+### Using Code Parameters
+
+```javascript
+import initRemoteDebugger from "rn-remote-debugger";
+
 initRemoteDebugger({
-  port: 8989, // WebSocket port (default: 8989)
-  enableConsole: true, // Enable console interception (default: true)
-  enableNetwork: true, // Enable network interception (default: true)
+  port: 8989,
+  enableConsole: true,
+  enableNetwork: true
 });
 ```
 
-### 3. Launch debugger application
+**Note**: If a configuration file exists, it will override code parameters.
 
-Download and open the RN Remote Debugger application (DMG file).
+## CLI Commands
 
-### 4. Start React Native application
+### Get Local IP
 
-Start your RN application normally, and the debugger will automatically connect and begin displaying logs and network requests.
+View all available IP addresses on your machine:
+
+```bash
+npx rn-remote-debugger-ip
+```
+
+Output:
+```
+📡 Your local IP addresses:
+
+  en0             →  192.168.1.100
+  en1             →  10.0.0.5
+
+💡 Usage in rn-remote-debug.js:
+
+  module.exports = {
+    host: '192.168.1.100',
+    port: 8989
+  };
+```
+
+### Create Configuration File
+
+Generate `rn-remote-debug.js` in your project root:
+
+```bash
+npx rn-remote-debugger-create
+```
+
+This will:
+- Auto-detect your local IP address
+- Create the configuration file
+- Show setup instructions
 
 ## Development Mode
 
 To run the debugger in development mode:
 
 ```bash
+# Go to client directory
+cd rn-remote-debugger-client
+
 # Install dependencies
 yarn install
 
@@ -75,10 +173,6 @@ yarn build
 ### Package as DMG (macOS)
 
 ```bash
-# Install build tool
-yarn add -D electron-builder
-
-# Package
 yarn dist:mac
 ```
 
@@ -91,6 +185,7 @@ After packaging, the DMG file will be in the `release` directory.
 - **Project Name**: Shows the currently connected project
 - **Connection Status**: Green link icon indicates connected, red indicates disconnected
 - **DevTools Button**: Click to open/close Chrome DevTools
+- **Android Tip Button**: Click to view adb reverse command
 
 ### Left Panel - Network Request List
 
@@ -110,16 +205,6 @@ After packaging, the DMG file will be in the `release` directory.
 ### Console Logs
 
 All console logs are displayed in Chrome DevTools (click the DevTools button in the top bar to open).
-
-## Configuration Options
-
-```javascript
-initRemoteDebugger({
-  port: 8989, // WebSocket server port
-  enableConsole: true, // Whether to intercept console logs
-  enableNetwork: true, // Whether to intercept network requests
-});
-```
 
 ## Important Notes
 
@@ -144,8 +229,6 @@ initRemoteDebugger({
    ```bash
    adb reverse --remove tcp:8989
    ```
-
-4. **Host Configuration**: For remote debugging on physical devices, configure your development machine's IP in the debugger app settings.
 
 ## FAQ
 

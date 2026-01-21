@@ -12,8 +12,9 @@
 - 📊 查看请求详情（Request、Response、cURL）
 - 🎨 美观的界面设计
 - ⚡️ 实时连接状态显示
+- 📱 应用重启时自动清空日志
 
-## 安装使用
+## 快速开始
 
 ### 1. 在 React Native 项目中安装 npm 包
 
@@ -23,37 +24,134 @@ npm install rn-remote-debugger
 yarn add rn-remote-debugger
 ```
 
-### 2. 在项目入口文件中引入
+### 2. 创建配置文件（推荐）
+
+在项目根目录运行以下命令：
+
+```bash
+npx rn-remote-debugger-create
+```
+
+这会自动创建 `rn-remote-debug.js` 配置文件，包含你电脑的 IP 地址：
+
+```javascript
+if (__DEV__) {
+  module.exports = {
+    host: '192.168.1.100', // 自动检测的 IP
+    port: 8989,
+    enableConsole: true,
+    enableNetwork: true
+  };
+} else {
+  module.exports = {};
+}
+```
+
+### 3. 在项目入口文件中引入
 
 在 `index.js` 或 `App.js` 的最顶部添加：
 
 ```javascript
 import initRemoteDebugger from "rn-remote-debugger";
 
-// 使用默认配置
 initRemoteDebugger();
+```
 
-// 或自定义配置
+调试器会自动读取配置文件并连接。
+
+### 4. Android 设备设置
+
+在启动应用前，在终端运行以下命令：
+
+```bash
+adb reverse tcp:8989 tcp:8989
+```
+
+### 5. 启动调试器应用
+
+下载并打开 RN Remote Debugger 桌面应用，开始查看日志和网络请求。
+
+## 配置方式
+
+### 使用配置文件（推荐）
+
+在项目根目录创建 `rn-remote-debug.js`：
+
+```javascript
+if (__DEV__) {
+  module.exports = {
+    host: '192.168.1.100',
+    port: 8989,
+    enableConsole: true,
+    enableNetwork: true
+  };
+} else {
+  module.exports = {};
+}
+```
+
+**优先级**：配置文件 > 代码参数
+
+### 使用代码参数
+
+```javascript
+import initRemoteDebugger from "rn-remote-debugger";
+
 initRemoteDebugger({
-  port: 8989, // WebSocket 端口（默认：8989）
-  enableConsole: true, // 启用 console 拦截（默认：true）
-  enableNetwork: true, // 启用网络拦截（默认：true）
+  port: 8989,
+  enableConsole: true,
+  enableNetwork: true
 });
 ```
 
-### 3. 启动调试器应用
+**注意**：如果存在配置文件，它会覆盖代码中的参数。
 
-下载并打开 RN Remote Debugger 应用（DMG 文件）。
+## CLI 命令
 
-### 4. 启动 React Native 应用
+### 查看本机 IP
 
-正常启动你的 RN 应用，调试器会自动连接并开始显示日志和网络请求。
+显示所有可用的 IP 地址：
+
+```bash
+npx rn-remote-debugger-ip
+```
+
+输出示例：
+```
+📡 Your local IP addresses:
+
+  en0             →  192.168.1.100
+  en1             →  10.0.0.5
+
+💡 Usage in rn-remote-debug.js:
+
+  module.exports = {
+    host: '192.168.1.100',
+    port: 8989
+  };
+```
+
+### 创建配置文件
+
+在项目根目录生成 `rn-remote-debug.js`：
+
+```bash
+npx rn-remote-debugger-create
+```
+
+命令会：
+- 自动检测本机 IP 地址
+- 创建配置文件
+- 显示后续操作步骤
 
 ## 开发模式
 
-如果你想在开发模式下运行调试器：
+如果你想运行调试器的开发模式：
 
 ```bash
+# 进入 client 目录
+cd rn-remote-debugger-client
+
 # 安装依赖
 yarn install
 
@@ -75,10 +173,6 @@ yarn build
 ### 打包成 DMG（macOS）
 
 ```bash
-# 安装打包工具
-yarn add -D electron-builder
-
-# 打包
 yarn dist:mac
 ```
 
@@ -91,6 +185,7 @@ yarn dist:mac
 - **项目名称**：显示当前连接的项目
 - **连接状态**：绿色链接图标表示已连接，红色表示断开
 - **开发工具按钮**：点击打开/关闭 Chrome DevTools
+- **Android 提示按钮**：点击查看 adb reverse 命令
 
 ### 左侧面板 - 网络请求列表
 
@@ -110,16 +205,6 @@ yarn dist:mac
 ### Console 日志
 
 所有 console 日志会在 Chrome DevTools 中显示（点击顶部开发工具按钮打开）。
-
-## 配置选项
-
-```javascript
-initRemoteDebugger({
-  port: 8989, // WebSocket 服务器端口
-  enableConsole: true, // 是否拦截 console 日志
-  enableNetwork: true, // 是否拦截网络请求
-});
-```
 
 ## 注意事项
 
@@ -144,8 +229,6 @@ initRemoteDebugger({
    ```bash
    adb reverse --remove tcp:8989
    ```
-
-4. **Host 配置**：在真机远程调试时，需要在调试器应用设置中配置开发机的 IP 地址。
 
 ## 常见问题
 
