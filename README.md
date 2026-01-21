@@ -123,19 +123,24 @@ initRemoteDebugger({
 
 1. **端口冲突**：确保端口 8989 未被占用，或修改为其他端口
 2. **生产环境**：建议只在开发环境启用，避免影响生产性能
-3. **网络环境**：
-   - **iOS 模拟器**：使用 `localhost` 即可
-   - **Android 模拟器**：使用 `10.0.2.2`（模拟器访问宿主机的特殊 IP）
-   - **Android 真机**：使用电脑的局域网 IP 地址（如 `192.168.1.100`），并确保手机和电脑在同一 Wi-Fi 网络
+3. **Android 设备**：需要使用 `adb reverse` 进行端口转发
 
-   Android 端配置示例：
-   ```javascript
-   // Android 真机/模拟器
-   initRemoteDebugger({
-     host: '10.0.2.2', // Android 模拟器使用此 IP
-     // host: '192.168.1.100', // Android 真机使用电脑的局域网 IP
-     port: 8989
-   });
+   在运行 React Native 应用之前，执行以下命令：
+   ```bash
+   adb reverse tcp:8989 tcp:8989
+   ```
+
+   该命令将 Android 设备的 8989 端口转发到开发机的 8989 端口，使 Android 应用能够连接到调试器。
+
+   如果修改了默认端口，需要相应调整：
+   ```bash
+   # 如果使用了其他端口，如 8990
+   adb reverse tcp:8990 tcp:8990
+   ```
+
+   取消端口转发：
+   ```bash
+   adb reverse --remove tcp:8989
    ```
 
 ## 常见问题
