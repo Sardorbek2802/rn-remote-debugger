@@ -1,9 +1,10 @@
 <div align="center">
-
-<img src="readme/logo.png" width="120" alt="RN Remote Debugger Logo" />
-
-# RN Remote Debugger
-
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><img src="readme/logo.png" width="80" alt="Logo" /></td>
+      <td><h1>RN Remote Debugger</h1></td>
+    </tr>
+  </table>
 </div>
 
 <p align="center">
@@ -46,6 +47,16 @@ yarn add rn-remote-debugger
 
 ```bash
 npx rn-remote-debugger-create
+```
+
+### ステップ 4：エントリーファイルでインポート
+
+React Native プロジェクトの `index.js` の先頭に追加：
+
+```javascript
+import initRemoteDebugger from 'rn-remote-debugger'
+
+initRemoteDebugger({})
 ```
 
 完了！デバッガーは自動的に接続します。

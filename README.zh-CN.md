@@ -1,9 +1,10 @@
 <div align="center">
-
-<img src="readme/logo.png" width="120" alt="RN Remote Debugger Logo" />
-
-# RN Remote Debugger
-
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><img src="readme/logo.png" width="80" alt="Logo" /></td>
+      <td><h1>RN Remote Debugger</h1></td>
+    </tr>
+  </table>
 </div>
 
 <p align="center">
@@ -46,6 +47,16 @@ yarn add rn-remote-debugger
 
 ```bash
 npx rn-remote-debugger-create
+```
+
+### 第四步：在入口文件中引入
+
+在 React Native 项目的 `index.js` 顶部添加：
+
+```javascript
+import initRemoteDebugger from 'rn-remote-debugger'
+
+initRemoteDebugger({})
 ```
 
 完成！调试器会自动连接。
