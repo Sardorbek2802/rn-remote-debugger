@@ -1,10 +1,6 @@
 <div align="center">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><img src="readme/logo.png" width="80" alt="Logo" /></td>
-      <td><h1>RN Remote Debugger</h1></td>
-    </tr>
-  </table>
+  <img src="readme/logo.png" width="120" alt="RN Remote Debugger" />
+  <h1>RN Remote Debugger</h1>
 </div>
 
 <p align="center">
